@@ -1,7 +1,7 @@
-package com.example.recicoin.model
+package com.example.recicoin.model.user
 
 enum class UserType {
-    COMMON,
+    USER,
     COLLECTION_POINT,
     COMPANY,
     ADMIN
