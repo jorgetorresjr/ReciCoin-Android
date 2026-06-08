@@ -7,9 +7,13 @@ import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -20,6 +24,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
@@ -45,13 +50,15 @@ fun RegisterUserPage(modifier: Modifier = Modifier) {
 
 
     Column(
-        modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp, vertical = 46.dp),
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp, vertical = 46.dp)
+            .verticalScroll(rememberScrollState()),
         horizontalAlignment = CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(17.dp)
     ) {
         Text(
             text = "Criar conta",
-            fontSize = 24.sp
+            fontSize = 24.sp,
+            fontWeight = FontWeight.Bold
         )
         OutlinedTextField(
             value = name,
@@ -88,6 +95,9 @@ fun RegisterUserPage(modifier: Modifier = Modifier) {
             onValueChange = { repeatPassword = it },
             visualTransformation = PasswordVisualTransformation()
         )
+
+        Spacer(modifier = Modifier.size(7.dp))
+
         Text(
             text = "Endereço",
             fontSize = 24.sp

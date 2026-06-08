@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -29,6 +30,8 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
@@ -67,7 +70,8 @@ fun LoginPage(modifier: Modifier = Modifier) {
         val modifier = modifier.fillMaxWidth(fraction = 0.9f)
         Text(
             text = "Bem-vindo(a)!",
-            fontSize = 24.sp
+            fontSize = 24.sp,
+            fontWeight = FontWeight.Bold
         )
         OutlinedTextField(
             value = email,
@@ -90,24 +94,24 @@ fun LoginPage(modifier: Modifier = Modifier) {
         )
         Row (horizontalArrangement = Arrangement.Center){
             Button(onClick = {
-                    Toast.makeText(
-                        activity,
-                        "Login OK!",
-                        Toast.LENGTH_LONG
-                    ).show()
+                Toast.makeText(
+                    activity,
+                    "Login OK!",
+                    Toast.LENGTH_LONG
+                ).show()
 
-                    val intent = Intent(
-                        activity,
-                        HomeActivity::class.java
-                    )
+                val intent = Intent(
+                    activity,
+                    HomeActivity::class.java
+                )
 
-                    intent.putExtra(
-                        "userType",
-                        UserType.USER.name
-                    )
+                intent.putExtra(
+                    "userType",
+                    UserType.USER.name
+                )
 
-                    activity.startActivity(intent)
-                },
+                activity.startActivity(intent)
+            },
 
                 enabled = email.isNotEmpty() &&
                         password.isNotEmpty()
@@ -116,7 +120,7 @@ fun LoginPage(modifier: Modifier = Modifier) {
                     fontSize = 10.sp)
             }
 
-            Spacer(modifier = Modifier.size(12.dp))
+            Spacer(modifier = Modifier.size(11.dp))
 
             Button( onClick = {
                 activity.startActivity(
@@ -130,9 +134,13 @@ fun LoginPage(modifier: Modifier = Modifier) {
                     fontSize = 10.sp)
             }
 
-            Spacer(modifier = Modifier.size(12.dp))
+            Spacer(modifier = Modifier.size(11.dp))
 
             Button(
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFF7A7979),
+                    contentColor = Color.White
+                ),
                 onClick = { email = ""; password = "" }
             ) {
                 Text("Limpar",

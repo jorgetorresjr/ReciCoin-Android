@@ -22,6 +22,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
@@ -50,8 +51,9 @@ fun RegisterCompanyPage(modifier: Modifier = Modifier) {
         verticalArrangement = Arrangement.spacedBy(17.dp)
     ) {
         Text(
-            text = "Criar conta de empresa",
-            fontSize = 24.sp
+            text = "Criar conta",
+            fontSize = 24.sp,
+            fontWeight = FontWeight.Bold
         )
         OutlinedTextField(
             value = name,

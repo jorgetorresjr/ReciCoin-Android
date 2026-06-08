@@ -1,57 +1,68 @@
 package com.example.recicoin.ui.theme
 
-import android.app.Activity
-import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.dynamicDarkColorScheme
-import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Color.Companion.Black
+import androidx.compose.ui.graphics.Color.Companion.Gray
 
-private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
+val GreenPrimary = Color(0xFF065427)
+val GreenSecondary = Color(0xFF39C16C)
+
+val DarkText = Color(0xFF263640)
+
+val BackgroundLight = Color(0xFFF5F5F5)
+val SurfaceLight = Color(0xFFFFFFFF)
+
+val White = Color(0xFFFFFFFF)
+
+private val LightColors = lightColorScheme(
+
+    primary = GreenPrimary,
+    secondary = GreenSecondary,
+
+    background = BackgroundLight,
+    surface = SurfaceLight,
+
+    onPrimary = White,
+    onSecondary = White,
+
+    onBackground = DarkText,
+    onSurface = DarkText
 )
 
-private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
+private val DarkColors = darkColorScheme(
 
-    /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
-    onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    */
+    primary = White,
+    secondary = SurfaceLight,
+
+    background = GreenPrimary,
+    surface = Color(0xFF1E1E1E),
+
+    onPrimary = Black,
+    onSecondary = Gray,
+
+    onBackground = White,
+    onSurface = White
 )
 
 @Composable
 fun ReciCoinTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {
-    val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        }
 
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
+    val colors = if (darkTheme) {
+        DarkColors
+    } else {
+        LightColors
     }
 
     MaterialTheme(
-        colorScheme = colorScheme,
+        colorScheme = colors,
         typography = Typography,
         content = content
     )
