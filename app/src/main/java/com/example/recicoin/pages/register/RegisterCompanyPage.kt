@@ -29,6 +29,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.recicoin.activities.LoginActivity
+import com.example.recicoin.model.user.CompanyProfile
+import com.example.recicoin.model.user.User
+import com.example.recicoin.model.user.UserType
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
+import com.google.firebase.firestore.firestore
 
 @Preview(showBackground = true)
 @Composable
@@ -115,11 +121,77 @@ fun RegisterCompanyPage(modifier: Modifier = Modifier) {
         ) {
             Button(
                 onClick = {
-                    activity.startActivity(
-                        Intent(activity, LoginActivity::class.java)
-                    )
-                    Toast.makeText(activity, "Registro Empresa OK!", Toast.LENGTH_LONG).show()
-                    activity.finish()
+                    Firebase.auth
+                        .createUserWithEmailAndPassword(email, password)
+                        .addOnCompleteListener(activity) { task ->
+                            if (task.isSuccessful) {
+                                Toast.makeText(
+                                    activity,
+                                    "Company created!",
+                                    Toast.LENGTH_LONG
+                                ).show()
+
+                                val uid = Firebase.auth.currentUser!!.uid
+
+                                val user = User(
+                                    uid = uid,
+                                    name = name,
+                                    email = email,
+                                    type = UserType.COMPANY
+                                )
+
+                                val profile = CompanyProfile(
+                                    description = description,
+                                    phone = phone
+                                )
+
+                                val data = hashMapOf(
+                                    "uid" to user.uid,
+                                    "name" to user.name,
+                                    "email" to user.email,
+                                    "type" to user.type.name,
+                                    "profile" to profile
+                                )
+
+
+                                Firebase.firestore
+                                    .collection("users")
+                                    .document(uid)
+                                    .set(data)
+                                    .addOnSuccessListener {
+
+                                        Toast.makeText(
+                                            activity,
+                                            "Register OK!",
+                                            Toast.LENGTH_LONG
+                                        ).show()
+
+                                        activity.startActivity(
+                                            Intent(activity, LoginActivity::class.java)
+                                        )
+
+                                        activity.finish()
+
+                                    }
+                                    .addOnFailureListener {
+                                        Firebase.auth.currentUser?.delete()
+
+                                        Toast.makeText(
+                                            activity,
+                                            "Register Error",
+                                            Toast.LENGTH_LONG
+                                        ).show()
+
+                                    }
+                            }
+                            else {
+                                Toast.makeText(
+                                    activity,
+                                    task.exception?.message ?: "Error",
+                                    Toast.LENGTH_LONG
+                                ).show()
+                            }
+                        }
                 },
                 enabled = name.isNotEmpty() &&
                         email.isNotEmpty() &&
