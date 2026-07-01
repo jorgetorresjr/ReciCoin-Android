@@ -39,12 +39,21 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.recicoin.model.user.UserType
 import com.example.recicoin.ui.theme.ReciCoinTheme
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
+import com.google.firebase.firestore.firestore
 import kotlin.jvm.java
 
 class LoginActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        val currentUser = Firebase.auth.currentUser
+
+        if (currentUser != null) {
+            redirectToHome(currentUser.uid)
+            return
+        }
         setContent {
             ReciCoinTheme {
                 Scaffold( modifier = Modifier.fillMaxSize() ) { innerPadding ->
@@ -52,6 +61,58 @@ class LoginActivity : ComponentActivity() {
                 }
             }
         }
+    }
+
+    fun redirectToHome(uid: String) {
+
+        Firebase.firestore
+            .collection("users")
+            .document(uid)
+            .get()
+            .addOnSuccessListener { document ->
+
+                if (!document.exists()) {
+                    Toast.makeText(
+                        this,
+                        "User data not found.",
+                        Toast.LENGTH_LONG
+                    ).show()
+                    return@addOnSuccessListener
+                }
+
+                val type = document.getString("type")
+
+                if (type == null) {
+                    Toast.makeText(
+                        this,
+                        "Invalid user type.",
+                        Toast.LENGTH_LONG
+                    ).show()
+                    return@addOnSuccessListener
+                }
+
+                val intent = Intent(
+                    this,
+                    HomeActivity::class.java
+                )
+
+                intent.putExtra(
+                    "userType",
+                    type
+                )
+
+                startActivity(intent)
+                finish()
+            }
+            .addOnFailureListener {
+
+                Toast.makeText(
+                    this,
+                    "Error loading user data.",
+                    Toast.LENGTH_LONG
+                ).show()
+
+            }
     }
 }
 
@@ -93,28 +154,37 @@ fun LoginPage(modifier: Modifier = Modifier) {
             )
         )
         Row (horizontalArrangement = Arrangement.Center){
-            Button(onClick = {
-                Toast.makeText(
-                    activity,
-                    "Login OK!",
-                    Toast.LENGTH_LONG
-                ).show()
+            Button(
+                onClick = {
+                    Firebase.auth
+                        .signInWithEmailAndPassword(email, password)
+                        .addOnCompleteListener(activity) { task ->
+                            if(task.isSuccessful) {
+                                val uid = Firebase.auth.currentUser!!.uid
 
-                val intent = Intent(
-                    activity,
-                    HomeActivity::class.java
-                )
+                                Toast.makeText(
+                                    activity,
+                                    "Login OK!",
+                                    Toast.LENGTH_LONG
+                                ).show()
 
-                intent.putExtra(
-                    "userType",
-                    UserType.USER.name
-                )
+                                (activity as LoginActivity).redirectToHome(uid)
 
-                activity.startActivity(intent)
-            },
+                            } else {
 
+                                Toast.makeText(
+                                    activity,
+                                    task.exception?.message ?: "Login Error",
+                                    Toast.LENGTH_LONG
+                                ).show()
+
+                            }
+
+                        }
+
+                },
                 enabled = email.isNotEmpty() &&
-                        password.isNotEmpty()
+                          password.isNotEmpty()
             ) {
                 Text("Login",
                     fontSize = 10.sp)
