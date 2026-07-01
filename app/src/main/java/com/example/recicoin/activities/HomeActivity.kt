@@ -1,5 +1,6 @@
 package com.example.recicoin.activities
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -14,6 +15,8 @@ import com.example.recicoin.pages.CollectionPointHomePage
 import com.example.recicoin.pages.CompanyHomePage
 import com.example.recicoin.pages.UserHomePage
 import com.example.recicoin.ui.theme.ReciCoinTheme
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
 
 class HomeActivity : ComponentActivity() {
 
@@ -58,5 +61,22 @@ class HomeActivity : ComponentActivity() {
                 }
             }
         }
+    }
+
+    fun logout() {
+
+        Firebase.auth.signOut()
+
+        val intent = Intent(
+            this,
+            LoginActivity::class.java
+        )
+
+        intent.flags =
+            Intent.FLAG_ACTIVITY_NEW_TASK or
+                    Intent.FLAG_ACTIVITY_CLEAR_TASK
+
+        startActivity(intent)
+        finish()
     }
 }
