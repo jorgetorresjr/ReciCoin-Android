@@ -5,6 +5,7 @@ import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.PermIdentity
+import androidx.compose.material.icons.filled.ProductionQuantityLimits
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -64,10 +65,10 @@ fun UserBottomBar(selectedTab: Int, onTabSelected: (Int) -> Unit) {
                 unselectedTextColor = Color.Gray
             ),
             icon = {
-                Icon(Icons.Default.Favorite, null)
+                Icon(Icons.Default.ProductionQuantityLimits, null)
             },
             label = {
-                Text("Favoritos")
+                Text("Produtos")
             }
         )
 
@@ -82,10 +83,10 @@ fun UserBottomBar(selectedTab: Int, onTabSelected: (Int) -> Unit) {
                 unselectedTextColor = Color.Gray
             ),
             icon = {
-                Icon(Icons.Default.History, null)
+                Icon(Icons.Default.Favorite, null)
             },
             label = {
-                Text("Histórico")
+                Text("Favoritos")
             }
         )
 

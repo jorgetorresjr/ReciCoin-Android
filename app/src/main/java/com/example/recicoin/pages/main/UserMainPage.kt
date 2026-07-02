@@ -10,7 +10,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.example.recicoin.pages.CollectionPointListPage
 import com.example.recicoin.pages.FavoritesPage
-import com.example.recicoin.pages.HistoryPage
+import com.example.recicoin.pages.UserProductListPage
 import com.example.recicoin.pages.home.UserHomePage
 import com.example.recicoin.pages.profile.UserProfilePage
 import com.example.recicoin.ui.nav.UserBottomBar
@@ -42,11 +42,11 @@ fun UserMainPage(modifier: Modifier) {
                 Modifier.padding(padding)
             )
 
-            2 -> FavoritesPage(
+            2 -> UserProductListPage(
                 Modifier.padding(padding)
             )
 
-            3 -> HistoryPage(
+            3 -> FavoritesPage(
                 Modifier.padding(padding)
             )
 
