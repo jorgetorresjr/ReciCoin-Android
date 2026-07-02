@@ -1,7 +1,5 @@
-package com.example.recicoin.pages
+package com.example.recicoin.pages.home
 
-import android.app.Activity
-import android.content.Intent
 import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -20,7 +18,7 @@ import com.example.recicoin.activities.HomeActivity
 
 @Preview(showBackground = true)
 @Composable
-fun CollectionPointHomePage(modifier: Modifier = Modifier) {
+fun UserHomePage(modifier: Modifier = Modifier) {
     val activity = LocalActivity.current as HomeActivity
 
     Column(
@@ -38,14 +36,14 @@ fun CollectionPointHomePage(modifier: Modifier = Modifier) {
                 Text("Logout")
             }
         }
-
         Text(
             text = "Bem-vindo(a) ao ReciCoin!",
             fontSize = 22.sp
         )
-
         Text(
-            text = "Cadastre seus produtos e apoie a reciclagem!"
+            text = "Recicle já no ponto de coleta mais próximo",
+            fontSize = 16.sp
         )
+
     }
 }

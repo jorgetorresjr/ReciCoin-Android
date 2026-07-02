@@ -1,4 +1,4 @@
-package com.example.recicoin.pages
+package com.example.recicoin.pages.home
 
 import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.layout.Arrangement
@@ -18,7 +18,7 @@ import com.example.recicoin.activities.HomeActivity
 
 @Preview(showBackground = true)
 @Composable
-fun UserHomePage(modifier: Modifier = Modifier) {
+fun CompanyHomePage(modifier: Modifier = Modifier) {
     val activity = LocalActivity.current as HomeActivity
 
     Column(
@@ -41,7 +41,7 @@ fun UserHomePage(modifier: Modifier = Modifier) {
             fontSize = 22.sp
         )
         Text(
-            text = "Recicle já no ponto de coleta mais próximo",
+            text = "Cadastre seus produtos e apoie a reciclagem!",
             fontSize = 16.sp
         )
 

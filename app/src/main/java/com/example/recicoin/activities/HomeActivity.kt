@@ -11,9 +11,9 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.ui.Modifier
 import com.example.recicoin.model.user.UserType
-import com.example.recicoin.pages.CollectionPointHomePage
-import com.example.recicoin.pages.CompanyHomePage
-import com.example.recicoin.pages.UserHomePage
+import com.example.recicoin.pages.main.CollectionPointMainPage
+import com.example.recicoin.pages.main.CompanyMainPage
+import com.example.recicoin.pages.main.UserMainPage
 import com.example.recicoin.ui.theme.ReciCoinTheme
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
@@ -40,17 +40,17 @@ class HomeActivity : ComponentActivity() {
                 ) { innerPadding ->
                     when(userType) {
                         UserType.USER -> {
-                            UserHomePage(
+                            UserMainPage(
                                 modifier = Modifier.padding(innerPadding)
                             )
                         }
                         UserType.COMPANY -> {
-                            CompanyHomePage(
+                            CompanyMainPage(
                                 modifier = Modifier.padding(innerPadding)
                             )
                         }
                         UserType.COLLECTION_POINT -> {
-                            CollectionPointHomePage(
+                            CollectionPointMainPage(
                                 modifier = Modifier.padding(innerPadding)
                             )
                         }
