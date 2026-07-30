@@ -1,7 +1,9 @@
 package com.example.recicoin.pages.register
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.location.Geocoder
 import android.widget.Toast
 import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.layout.Arrangement
@@ -38,6 +40,12 @@ import com.example.recicoin.model.user.UserType
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.firestore
+import com.google.android.gms.maps.model.LatLng
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.util.Locale
 
 @Preview(showBackground = true)
 @Composable
@@ -173,6 +181,7 @@ fun RegisterCollectionPointPage(modifier: Modifier = Modifier) {
         ) {
             Button(
                 onClick = {
+
                     val address = Address(
                         street = street,
                         number = number,
@@ -181,80 +190,103 @@ fun RegisterCollectionPointPage(modifier: Modifier = Modifier) {
                         state = state,
                         zipCode = zipCode
                     )
-                    Firebase.auth
-                        .createUserWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(activity) { task ->
-                            if (task.isSuccessful) {
-                                Toast.makeText(
-                                    activity,
-                                    "Collection Point created!",
-                                    Toast.LENGTH_LONG
-                                ).show()
 
-                                val uid = Firebase.auth.currentUser!!.uid
+                    val fullAddress =
+                        "${address.street}, ${address.number}, " +
+                                "${address.neighborhood}, ${address.city}, ${address.state}"
 
-                                val user = User(
-                                    uid = uid,
-                                    name = name,
-                                    email = email,
-                                    type = UserType.COLLECTION_POINT
-                                )
+                    CoroutineScope(Dispatchers.Main).launch {
 
-                                val profile = CollectionPointProfile(
-                                    description = description,
-                                    address = address,
-                                    latitude = 0.0,
-                                    longitude = 0.0,
-                                    phone = phone
-                                )
-
-                                val data = hashMapOf(
-                                    "uid" to user.uid,
-                                    "name" to user.name,
-                                    "email" to user.email,
-                                    "type" to user.type.name,
-                                    "profile" to profile
-                                )
-
-
-                                Firebase.firestore
-                                    .collection("users")
-                                    .document(uid)
-                                    .set(data)
-                                    .addOnSuccessListener {
-
-                                        Toast.makeText(
-                                            activity,
-                                            "Register OK!",
-                                            Toast.LENGTH_LONG
-                                        ).show()
-
-                                        activity.startActivity(
-                                            Intent(activity, LoginActivity::class.java)
-                                        )
-
-                                        activity.finish()
-
-                                    }
-                                    .addOnFailureListener {
-                                        Firebase.auth.currentUser?.delete()
-
-                                        Toast.makeText(
-                                            activity,
-                                            "Register Error",
-                                            Toast.LENGTH_LONG
-                                        ).show()
-
-                                    }
-                            }
-                            else {
-                                Toast.makeText(
-                                    activity,
-                                    task.exception?.message ?: "Error",
-                                    Toast.LENGTH_LONG
-                                ).show()
-                            }
+                        val location = withContext(Dispatchers.IO) {
+                            getLatLngFromAddress(activity, fullAddress)
                         }
+
+                        if (location == null) {
+                            Toast.makeText(
+                                activity,
+                                "Não foi possível localizar o endereço.",
+                                Toast.LENGTH_LONG
+                            ).show()
+                            return@launch
+                        }
+
+                        Firebase.auth
+                            .createUserWithEmailAndPassword(email, password)
+                            .addOnCompleteListener(activity) { task ->
+
+                                if (task.isSuccessful) {
+
+                                    Toast.makeText(
+                                        activity,
+                                        "Collection Point created!",
+                                        Toast.LENGTH_LONG
+                                    ).show()
+
+                                    val uid = Firebase.auth.currentUser!!.uid
+
+                                    val user = User(
+                                        uid = uid,
+                                        name = name,
+                                        email = email,
+                                        type = UserType.COLLECTION_POINT
+                                    )
+
+                                    val profile = CollectionPointProfile(
+                                        description = description,
+                                        address = address,
+                                        latitude = location.latitude,
+                                        longitude = location.longitude,
+                                        phone = phone
+                                    )
+
+                                    val data = hashMapOf(
+                                        "uid" to user.uid,
+                                        "name" to user.name,
+                                        "email" to user.email,
+                                        "type" to user.type.name,
+                                        "profile" to profile
+                                    )
+
+                                    Firebase.firestore
+                                        .collection("users")
+                                        .document(uid)
+                                        .set(data)
+                                        .addOnSuccessListener {
+
+                                            Toast.makeText(
+                                                activity,
+                                                "Register OK!",
+                                                Toast.LENGTH_LONG
+                                            ).show()
+
+                                            activity.startActivity(
+                                                Intent(activity, LoginActivity::class.java)
+                                            )
+
+                                            activity.finish()
+
+                                        }
+                                        .addOnFailureListener {
+
+                                            Firebase.auth.currentUser?.delete()
+
+                                            Toast.makeText(
+                                                activity,
+                                                "Register Error",
+                                                Toast.LENGTH_LONG
+                                            ).show()
+                                        }
+                                } else {
+
+                                    Toast.makeText(
+                                        activity,
+                                        task.exception?.message ?: "Error",
+                                        Toast.LENGTH_LONG
+                                    ).show()
+
+                                }
+                            }
+                    }
                 },
                 enabled = name.isNotEmpty() &&
                         email.isNotEmpty() &&
@@ -285,4 +317,24 @@ fun RegisterCollectionPointPage(modifier: Modifier = Modifier) {
             }
         }
     }
+}
+
+
+@Suppress("DEPRECATION")
+fun getLatLngFromAddress(
+    context: Context,
+    address: String
+): LatLng? {
+    val geocoder = Geocoder(context, Locale.getDefault())
+
+    val result = geocoder.getFromLocationName(address, 1)
+
+    if (!result.isNullOrEmpty()) {
+        return LatLng(
+            result[0].latitude,
+            result[0].longitude
+        )
+    }
+
+    return null
 }
