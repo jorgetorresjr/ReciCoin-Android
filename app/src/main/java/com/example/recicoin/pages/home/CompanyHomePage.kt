@@ -1,6 +1,5 @@
 package com.example.recicoin.pages.home
 
-import android.content.Intent
 import android.widget.Toast
 import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.layout.Arrangement
@@ -21,12 +20,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.recicoin.activities.HomeActivity
 import com.example.recicoin.repository.ProductRepository
-import com.example.recicoin.ui.ProductCard
+import com.example.recicoin.ui.components.ProductCard
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.DocumentSnapshot
@@ -67,16 +65,7 @@ fun CompanyHomePage(
             .padding(24.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.End
-        ) {
-            Button(
-                onClick = { activity.logout() }
-            ) {
-                Text("Logout")
-            }
-        }
+
         Text(
             text = "Bem-vindo(a) ao ReciCoin!",
             fontSize = 22.sp

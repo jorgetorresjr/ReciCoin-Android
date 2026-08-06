@@ -1,34 +1,28 @@
 package com.example.recicoin.pages
 
 import android.widget.Toast
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.Icon
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.recicoin.repository.ProductRepository
-import com.example.recicoin.ui.ProductCard
+import com.example.recicoin.ui.components.ProductCard
 import com.google.firebase.firestore.DocumentSnapshot
+
 
 @Composable
 fun UserProductListPage(
     modifier: Modifier = Modifier
 ) {
+
     val context = LocalContext.current
 
     var search by remember {
@@ -43,13 +37,14 @@ fun UserProductListPage(
         mutableStateOf<List<DocumentSnapshot>>(emptyList())
     }
 
+
     LaunchedEffect(Unit) {
+
         repository.getAllProducts(
             onSuccess = {
                 products = it
             },
-            onFailure = {
-                exception ->
+            onFailure = { exception ->
                 Toast.makeText(
                     context,
                     exception.message ?: "Erro ao carregar produtos",
@@ -60,47 +55,80 @@ fun UserProductListPage(
         )
     }
 
-    val filteredProducts = products.filter {
 
+    val filteredProducts = products.filter {
         val name = it.getString("name") ?: ""
 
         name.contains(
             search,
             ignoreCase = true
         )
-
     }
 
+
     Column(
-        modifier = modifier.fillMaxSize()
+        modifier = modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp)
     ) {
+        Text(
+            text = "Use seus ReciCoins para resgatar produtos",
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+
+        Spacer(
+            Modifier.height(7.dp)
+        )
 
         OutlinedTextField(
             value = search,
             onValueChange = {
                 search = it
             },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(12.dp),
             label = {
-                Text("Pesquisar produto")
+                Text("Pesquisar")
             },
             leadingIcon = {
-                Icon(Icons.Default.Search, null)
-            }
+                Icon(
+                    Icons.Default.Search,
+                    contentDescription = null
+                )
+            },
+            singleLine = true
         )
 
-        LazyColumn {
+        Spacer(
+            Modifier.height(8.dp)
+        )
+
+        Text(
+            text = "${filteredProducts.size} produtos",
+            style = MaterialTheme.typography.labelMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+
+        Spacer(
+            Modifier.height(8.dp)
+        )
+
+        LazyColumn(
+            verticalArrangement = Arrangement.spacedBy(10.dp),
+            contentPadding = PaddingValues(
+                bottom = 16.dp
+            )
+        ) {
             items(filteredProducts) { product ->
                 ProductCard(
                     product = product,
                     showRedeemButton = true,
                     onRedeemClick = {
+
                     }
                 )
             }
         }
-
     }
 }

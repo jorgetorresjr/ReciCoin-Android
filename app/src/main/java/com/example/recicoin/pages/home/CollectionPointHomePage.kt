@@ -19,23 +19,11 @@ import com.example.recicoin.activities.HomeActivity
 @Preview(showBackground = true)
 @Composable
 fun CollectionPointHomePage(modifier: Modifier = Modifier) {
-    val activity = LocalActivity.current as HomeActivity
-
     Column(
         modifier = modifier
             .fillMaxSize()
             .padding(24.dp)
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.End
-        ) {
-            Button(
-                onClick = { activity.logout() }
-            ) {
-                Text("Logout")
-            }
-        }
 
         Text(
             text = "Bem-vindo(a) ao ReciCoin!",

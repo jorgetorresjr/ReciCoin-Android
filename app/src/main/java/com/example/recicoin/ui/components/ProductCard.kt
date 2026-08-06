@@ -1,4 +1,4 @@
-package com.example.recicoin.ui
+package com.example.recicoin.ui.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

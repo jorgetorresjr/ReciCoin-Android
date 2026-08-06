@@ -47,7 +47,7 @@ fun CompanyMainPage(modifier: Modifier) {
             )
 
             2 -> CompanyProfilePage(
-                Modifier.padding(padding)
+                padding=padding
             )
 
         }

@@ -10,7 +10,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.recicoin.ui.CollectionRegisterViewModel
+import com.example.recicoin.ui.viewmodel.CollectionRegisterViewModel
 import com.google.firebase.firestore.DocumentSnapshot
 
 

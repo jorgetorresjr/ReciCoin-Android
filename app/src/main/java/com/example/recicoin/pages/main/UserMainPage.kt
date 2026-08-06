@@ -8,6 +8,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import com.example.recicoin.model.user.User
 import com.example.recicoin.pages.CollectionPointListPage
 import com.example.recicoin.pages.FavoritesPage
 import com.example.recicoin.pages.UserProductListPage
@@ -16,7 +17,10 @@ import com.example.recicoin.pages.profile.UserProfilePage
 import com.example.recicoin.ui.nav.UserBottomBar
 
 @Composable
-fun UserMainPage(modifier: Modifier) {
+fun UserMainPage(
+    modifier: Modifier = Modifier
+) {
+
     var selectedTab by remember {
         mutableStateOf(0)
     }
@@ -29,13 +33,12 @@ fun UserMainPage(modifier: Modifier) {
                     selectedTab = it
                 }
             )
-
         }
 
     ) { padding ->
-        when(selectedTab){
+        when(selectedTab) {
             0 -> UserHomePage(
-                Modifier.padding(padding)
+                modifier = Modifier.padding(padding)
             )
 
             1 -> CollectionPointListPage(
@@ -51,11 +54,8 @@ fun UserMainPage(modifier: Modifier) {
             )
 
             4 -> UserProfilePage(
-                Modifier.padding(padding)
+                padding = padding
             )
-
         }
-
     }
-
 }

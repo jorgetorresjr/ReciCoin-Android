@@ -68,7 +68,7 @@ fun CollectionPointMainPage(modifier: Modifier) {
             }
 
             2 -> CollectionPointProfilePage(
-                Modifier.padding(padding)
+                padding = padding
             )
 
         }

@@ -1,4 +1,4 @@
-package com.example.recicoin.ui
+package com.example.recicoin.ui.viewmodel
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf

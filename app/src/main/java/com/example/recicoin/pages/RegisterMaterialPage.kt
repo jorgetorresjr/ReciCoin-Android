@@ -7,7 +7,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.recicoin.model.MaterialType
-import com.example.recicoin.ui.RegisterMaterialViewModel
+import com.example.recicoin.ui.viewmodel.RegisterMaterialViewModel
 
 
 @Composable

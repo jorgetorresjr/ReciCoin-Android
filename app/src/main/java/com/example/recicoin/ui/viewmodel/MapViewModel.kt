@@ -1,15 +1,14 @@
-package com.example.recicoin.ui
+package com.example.recicoin.ui.viewmodel
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.example.recicoin.model.Address
-import com.example.recicoin.model.user.CollectionPointProfile
-import com.example.recicoin.model.user.User
 import com.example.recicoin.model.user.UserType
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
+import kotlin.collections.get
 
 data class MapCollectionPoint(
     val uid: String,
